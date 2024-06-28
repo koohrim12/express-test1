@@ -29,4 +29,11 @@ h3 {
 input {
   width: 500px;
   height: 400px;
+  background-color: grey;
+  color: white;
+}
+input::placeholder {
+  color: black; /* 원하는 색상으로 변경 */
+
+  padding-top: 100px;
 }
