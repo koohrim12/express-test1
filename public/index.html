@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POST 요청 테스트</title>
+    <script>
+      // 서버로부터 받은 데이터를 페이지에 추가하는 함수
+      function displayResponse(data) {
+        const responseDiv = document.getElementById("response");
+        const newContent = document.createElement("div");
+        newContent.innerText = "입력한 내용: " + data.inputContent;
+        responseDiv.appendChild(newContent);
+      }
+
+      // 폼이 제출될 때 호출되는 함수
+      function handleSubmit(event) {
+        event.preventDefault(); // 폼의 기본 제출 동작을 막음
+
+        const formData = new FormData(event.target);
+        const inputContent = formData.get("inputContent");
+
+        // 서버에 POST 요청 보내기
+        fetch("/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({ inputContent }),
+        })
+          .then((response) => response.json())
+          .then((data) => displayResponse(data))
+          .catch((error) => console.error("Error:", error));
+      }
+
+      // 페이지가 로드되면 폼의 submit 이벤트 리스너를 설정
+      window.onload = () => {
+        const form = document.getElementById("inputForm");
+        form.onsubmit = handleSubmit;
+      };
+    </script>
+  </head>
+  <body>
+    <h2>POST 요청 테스트</h2>
+    <form id="inputForm">
+      <label for="inputContent">내용 입력:</label>
+      <input type="text" id="inputContent" name="inputContent" /><br /><br />
+      <button type="submit">제출하기</button>
+    </form>
+    <div id="response"></div>
+  </body>
+</html>
